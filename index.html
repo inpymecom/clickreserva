@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ClickReserva - Sistemas de Reservas Automatizados</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Epilogue:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --dark: #1a1a1a;
+    --dark-mid: #2a2a2a;
+    --gray: #4a4a4a;
+    --soft: #888888;
+    --line: #e0e0e0;
+    --bg: #f5f5f5;
+    --white: #ffffff;
+    --green: #22c55e;
+    --green-dark: #16a34a;
+    --red: #dc3545;
+  }
+
+  html, body {
+    min-height: 100vh;
+    background: var(--bg);
+    font-family: 'Epilogue', sans-serif;
+    color: var(--dark);
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+
+  /* HEADER */
+  .header {
+    width: 100%;
+    background: var(--dark);
+    padding: 48px 24px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(34,197,94,0.06);
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .header-content {
+    position: relative;
+    z-index: 2;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.02em;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .brand span {
+    color: var(--green);
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 8px;
+    font-weight: 400;
+    animation: fadeUp 0.5s ease 0.1s both;
+  }
+
+  /* VIDEO SECTION */
+  .video-section {
+    width: calc(100% - 36px);
+    max-width: 500px;
+    margin: -20px auto 0;
+    position: relative;
+    z-index: 10;
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+    animation: slideUp 0.5s ease 0.15s both;
+  }
+
+  .video-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--dark-mid);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  .video-placeholder .play-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: all 0.2s;
+  }
+
+  .video-placeholder:hover .play-icon {
+    background: var(--green);
+    transform: scale(1.05);
+  }
+
+  /* SECTIONS */
+  .section {
+    width: calc(100% - 36px);
+    max-width: 500px;
+    margin: 20px auto 0;
+    background: var(--white);
+    border-radius: 16px;
+    padding: 24px 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .section h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .section h3 span {
+    color: var(--green);
+  }
+
+  /* PILARES */
+  .pilares {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .pilar {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 16px 8px;
+    border: 1px solid var(--line);
+  }
+
+  .pilar-icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+
+  .pilar-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 2px;
+  }
+
+  .pilar-desc {
+    font-size: 10px;
+    color: var(--soft);
+  }
+
+  /* PASOS */
+  .paso {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .paso:last-child { margin-bottom: 0; }
+
+  .paso-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--dark);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .paso-text strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+
+  .paso-text span {
+    font-size: 12px;
+    color: var(--soft);
+  }
+
+  /* TABLA COMPARATIVA */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    min-width: 380px;
+  }
+
+  th {
+    background: var(--dark);
+    color: white;
+    padding: 10px 8px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  th:first-child { border-radius: 8px 0 0 0; }
+  th:last-child { border-radius: 0 8px 0 0; }
+
+  td {
+    padding: 9px 8px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .highlight {
+    background: #f0fdf4;
+    font-weight: 600;
+  }
+
+  .check { color: var(--green); font-weight: 700; }
+  .cross { color: var(--red); }
+
+  /* PRECIO */
+  .precio-box {
+    background: var(--dark);
+    color: white;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .precio-grande {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--green);
+    line-height: 1;
+  }
+
+  .precio-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 6px;
+  }
+
+  .precio-mant {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 8px;
+  }
+
+  /* BOTONES */
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--green);
+    color: white;
+    box-shadow: 0 4px 20px rgba(34,197,94,0.3);
+  }
+
+  .btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+  .btn-outline {
+    background: var(--white);
+    color: var(--dark);
+    border: 1.5px solid var(--line);
+    margin-top: 8px;
+  }
+
+  .btn-outline:hover { border-color: var(--dark); }
+
+  /* FOOTER */
+  .footer {
+    width: 100%;
+    margin-top: 32px;
+    padding: 20px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--soft);
+    background: var(--white);
+    border-top: 1px solid var(--line);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-content">
+    <div class="brand">Click<span>Reserva</span></div>
+    <div class="subtitle">Julio Calderaro · Sistemas de Reservas Automatizados</div>
+  </div>
+</div>
+
+<!-- VIDEO -->
+<div class="video-section">
+  <div class="video-placeholder" id="videoPlaceholder">
+    <div class="play-icon">▶</div>
+    <span>Video demostrativo</span>
+    <span style="font-size:11px;opacity:0.6;">Próximamente</span>
+  </div>
+</div>
+
+<!-- QUÉ OFREZCO -->
+<div class="section">
+  <h3>¿Qué <span>ofrezco</span>?</h3>
+  <div class="pilares">
+    <div class="pilar">
+      <div class="pilar-icon">🍽️</div>
+      <div class="pilar-title">Sistema de Reservas</div>
+      <div class="pilar-desc">QR + Formulario + App Tablet</div>
+    </div>
+    <div class="pilar">
+      <div class="pilar-icon">🌐</div>
+      <div class="pilar-title">Landing Page</div>
+      <div class="pilar-desc">Web profesional + Carta + Horario</div>
+    </div>
+    <div class="pilar">
+      <div class="pilar-icon">💬</div>
+      <div class="pilar-title">WhatsApp Auto</div>
+      <div class="pilar-desc">Respuestas automáticas 24/7</div>
+    </div>
+  </div>
+</div>
+
+<!-- CÓMO FUNCIONA -->
+<div class="section">
+  <h3>¿Cómo <span>funciona</span>?</h3>
+  <div class="paso">
+    <div class="paso-num">1</div>
+    <div class="paso-text">
+      <strong>El cliente escanea el QR</strong>
+      <span>Desde la mesa, la puerta o redes sociales. Abre el formulario en su móvil.</span>
+    </div>
+  </div>
+  <div class="paso">
+    <div class="paso-num">2</div>
+    <div class="paso-text">
+      <strong>Reserva en 30 segundos</strong>
+      <span>Elige día, hora y personas. Recibe email de confirmación al instante.</span>
+    </div>
+  </div>
+  <div class="paso">
+    <div class="paso-num">3</div>
+    <div class="paso-text">
+      <strong>El camarero lo ve en la tablet</strong>
+      <span>App táctil: confirma, asigna mesa o cancela. Todo sincronizado.</span>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARATIVA -->
+<div class="section">
+  <h3><span>Comparativa</span> de costes</h3>
+  <div class="table-wrapper">
+    <table>
+      <tr>
+        <th></th>
+        <th style="background:#22c55e;">ClickReserva</th>
+        <th>TheFork</th>
+        <th>CoverManager</th>
+      </tr>
+      <tr>
+        <td style="text-align:left;">Cuota mensual</td>
+        <td class="highlight"><strong>0€</strong></td>
+        <td>89-149€</td>
+        <td>50-100€</td>
+      </tr>
+      <tr>
+        <td style="text-align:left;">Comisión por cliente</td>
+        <td class="highlight"><strong>0€</strong></td>
+        <td>1-2€</td>
+        <td>0€</td>
+      </tr>
+      <tr>
+        <td style="text-align:left;">Coste 1er año</td>
+        <td class="highlight"><strong>600€</strong></td>
+        <td>~1.200€</td>
+        <td>~800€</td>
+      </tr>
+      <tr>
+        <td style="text-align:left;">Dueño de sus datos</td>
+        <td class="check">✓</td>
+        <td class="cross">✗</td>
+        <td class="cross">✗</td>
+      </tr>
+      <tr>
+        <td style="text-align:left;">Sin permanencia</td>
+        <td class="check">✓</td>
+        <td class="cross">✗</td>
+        <td class="cross">✗</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- PRECIO -->
+<div class="section">
+  <h3><span>Precio</span></h3>
+  <div class="precio-box">
+    <div class="precio-grande">600€</div>
+    <div class="precio-sub">Implantación completa · Pago único</div>
+    <div class="precio-mant">Mantenimiento opcional: 35€/mes · Sin permanencia</div>
+  </div>
+</div>
+
+<!-- DEMO -->
+<div class="section">
+  <h3>Prueba una <span>demo en vivo</span></h3>
+  <p style="text-align:center;font-size:13px;color:var(--soft);margin-bottom:14px;">
+    Así funciona el sistema del Bar Restaurante Kupula
+  </p>
+  <a href="https://TUUSUARIO.github.io/kupula-landing/" target="_blank" class="btn btn-outline">
+    🍽️ &nbsp;Ver landing del Bar Kupula
+  </a>
+</div>
+
+<!-- CONTACTO -->
+<div class="section">
+  <h3>¿<span>Hablamos</span>?</h3>
+  <a href="https://wa.me/34653481985?text=Hola%20Julio,%20me%20interesa%20el%20sistema%20de%20reservas" target="_blank" class="btn btn-primary">
+    💬 &nbsp;Escríbeme por WhatsApp
+  </a>
+  <a href="mailto:inpymecom@gmail.com" target="_blank" class="btn btn-outline">
+    ✉️ &nbsp;inpymecom@gmail.com
+  </a>
+</div>
+
+<div class="footer">
+  ClickReserva · Julio Calderaro · Sistemas de Reservas Automatizados<br>
+  inpymecom@gmail.com · +34 653 481 985
+</div>
+
+<script>
+// ⚠️ CAMBIAR: Cuando tengas el video, reemplaza el placeholder
+const VIDEO_URL = ""; // Poner aquí la URL del video cuando lo tengas
+
+if (VIDEO_URL) {
+  const placeholder = document.getElementById('videoPlaceholder');
+  placeholder.innerHTML = `
+    <video width="100%" height="100%" controls style="display:block;">
+      <source src="${VIDEO_URL}" type="video/mp4">
+    </video>
+  `;
+}
+</script>
+</body>
+</html>
