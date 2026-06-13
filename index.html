@@ -327,6 +327,96 @@
 
   .btn-outline:hover { border-color: var(--dark); }
 
+    /* CHECKBOX PROTECCIÓN DE DATOS */
+  .privacy-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 6px 0 10px;
+    font-size: 12px;
+    color: var(--gray);
+    text-align: left;
+  }
+
+  .privacy-check input[type="checkbox"] {
+    width: auto;
+    margin-top: 2px;
+    accent-color: var(--green);
+  }
+
+  .privacy-link-contacto {
+    display: block;
+    font-size: 11px;
+    color: var(--green);
+    text-decoration: underline;
+    cursor: pointer;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .privacy-link-contacto:hover {
+    color: var(--green-dark);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.active {
+    display: flex;
+  }
+
+  .modal-box {
+    background: white;
+    border-radius: 16px;
+    padding: 24px 20px;
+    max-width: 440px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    animation: fadeUp 0.3s ease;
+  }
+
+  .modal-box h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    color: var(--green);
+    margin-bottom: 14px;
+    text-align: center;
+  }
+
+  .modal-box p {
+    font-size: 12px;
+    color: var(--gray);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .modal-close {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    padding: 10px;
+    background: var(--dark);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+  }
+ 
   /* FOOTER */
   .footer {
     width: 100%;
@@ -482,6 +572,13 @@
   </a>
 </div>
 
+<!-- PROTECCIÓN DE DATOS -->
+<label class="privacy-check">
+  <input type="checkbox" id="privacyCheckContacto">
+  <span>He leído y acepto la <strong>política de protección de datos</strong></span>
+</label>
+<span class="privacy-link-contacto" id="privacyLinkContacto">Ver política de protección de datos</span>
+ 
 <!-- CONTACTO -->
 <div class="section">
   <h3>¿<span>Hablamos</span>?</h3>
@@ -492,7 +589,19 @@
     ✉️ &nbsp;inpymecom@gmail.com
   </a>
 </div>
-
+ 
+<!-- MODAL PROTECCIÓN DE DATOS -->
+<div class="modal-overlay" id="privacyModalClick">
+  <div class="modal-box">
+    <h4>🔒 Protección de Datos</h4>
+    <p>Los datos facilitados a través de este formulario de contacto serán utilizados <strong>exclusivamente</strong> para atender tu consulta sobre los servicios de ClickReserva.</p>
+    <p>No serán cedidos, vendidos ni facilitados a <strong>terceros ajenos</strong>, ni utilizados para fines comerciales no solicitados.</p>
+    <p>Las personas interesadas podrán solicitar en cualquier momento la <strong>modificación, actualización o supresión</strong> de sus datos personales.</p>
+    <p style="font-size:11px;color:var(--soft);margin-top:12px;">Julio Calderaro · ClickReserva · inpymecom@gmail.com</p>
+    <button class="modal-close" id="modalCloseClick">Entendido</button>
+  </div>
+</div>
+ 
 <div class="footer">
   ClickReserva · Julio Calderaro · Sistemas de Reservas Automatizados<br>
   inpymecom@gmail.com · +34 653 481 985
@@ -510,6 +619,26 @@ if (VIDEO_URL) {
     </video>
   `;
 }
+
+// Modal de protección de datos
+const privacyLinkContacto = document.getElementById('privacyLinkContacto');
+const privacyModalClick = document.getElementById('privacyModalClick');
+const modalCloseClick = document.getElementById('modalCloseClick');
+
+privacyLinkContacto.addEventListener('click', function() {
+  privacyModalClick.classList.add('active');
+});
+
+modalCloseClick.addEventListener('click', function() {
+  privacyModalClick.classList.remove('active');
+});
+
+privacyModalClick.addEventListener('click', function(e) {
+  if (e.target === privacyModalClick) {
+    privacyModalClick.classList.remove('active');
+  }
+});
+ 
 </script>
 </body>
 </html>
